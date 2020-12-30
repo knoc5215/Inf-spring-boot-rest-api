@@ -63,7 +63,7 @@ public class EventControllerTest {
     @Test
     void createEvent_Bad_Reqeust() throws Exception {
         Event event = Event.builder()
-                .id(100)
+
                 .name("Spring")
                 .description("REST API dev with Spring")
                 .beginEnrollmentDateTime(LocalDateTime.of(2020, 12, 25, 12, 12))
@@ -74,9 +74,11 @@ public class EventControllerTest {
                 .maxPrice(200)
                 .limitOfEnrollment(1000)
                 .location("D2 Factory")
+                /* EventDto에 없는 field를 넘겨줄때 ? 400 bad_request 가 더 엄격한 처리 */
                 .free(true)
                 .offline(false)
                 .eventStatus(EventStatus.PUBLISHED)
+                .id(100)
                 .build();
 
 
