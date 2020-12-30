@@ -37,12 +37,12 @@ public class EventController {
     @PostMapping
     public ResponseEntity createEvent(@RequestBody @Valid EventDto eventDto, Errors errors) {
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(errors);
         }
 
         eventValidator.validate(eventDto, errors);
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(errors);    // errors는 java bean spec을 준수한 것이 아니라, serialize 불가 --> ErrorsSerializer를 objectMapper에 등록해주면, json으로 받을 수 있다
         }
 
 
