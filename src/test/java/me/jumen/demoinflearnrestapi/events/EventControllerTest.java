@@ -4,6 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.jumen.demoinflearnrestapi.common.TestDescription;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -138,55 +142,47 @@ public class EventControllerTest {
 
     }
 
-    @Test
-    void testFree() {
-        // 1
+    @ParameterizedTest
+    @MethodSource(value = "paramsForTestFree")
+    void testFree(int basePrice, int maxPrice, boolean isFree) {
         Event event = Event.builder()
-                .basePrice(0)
-                .maxPrice(0)
+                .basePrice(basePrice)
+                .maxPrice(maxPrice)
                 .build();
-
         event.update();
 
-        assertThat(event.isFree()).isTrue();
+        assertThat(event.isFree()).isEqualTo(isFree);
 
-
-        // 2
-        event = Event.builder()
-                .basePrice(1000)
-                .maxPrice(0)
-                .build();
-
-        event.update();
-
-        assertThat(event.isFree()).isFalse();
-
-        // 3
-        event = Event.builder()
-                .basePrice(0)
-                .maxPrice(1000)
-                .build();
-
-        event.update();
-
-        assertThat(event.isFree()).isFalse();
     }
 
-    @Test
-    void testOffline() {
-        // 1
-        Event event = Event.builder()
-                .location("역삼역")
-                .build();
-        event.update();
-
-        assertThat(event.isOffline()).isTrue();
-
-        // 2
-        event = Event.builder()
-                .build();
-        event.update();
-
-        assertThat(event.isOffline()).isFalse();
+    private static Object[] paramsForTestFree() {
+        return new Object[]{
+                new Object[]{0, 0, true},
+                new Object[]{100, 0, false},
+                new Object[]{0, 100, false},
+                new Object[]{100, 100, false}
+        };
     }
+
+    @ParameterizedTest
+    @MethodSource(value = "paramsForTestOffline")
+    void testOffline(String location, boolean isOffline) {
+        Event event = Event.builder()
+                .location(location)
+                .build();
+        event.update();
+
+        assertThat(event.isOffline()).isEqualTo(isOffline);
+
+    }
+
+    private static Object[] paramsForTestOffline() {
+        return new Object[]{
+                new Object[]{"강남", true},
+                new Object[]{null, false},
+                new Object[]{"   ", false},
+        };
+    }
+
+
 }
