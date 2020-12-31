@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -54,10 +55,9 @@ public class EventControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("id").exists())
-                .andExpect(header().exists(HttpHeaders.LOCATION))
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
-                .andExpect(jsonPath("id").value(Matchers.not(100)))
-                .andExpect(jsonPath("free").value(Matchers.not(true)))
+                .andExpect(jsonPath("free").value(false))
+                .andExpect(jsonPath("offline").value(true))
                 .andExpect(jsonPath("eventStatus").value(Matchers.not(EventStatus.DRAFT)))
         ;
     }
@@ -125,18 +125,68 @@ public class EventControllerTest {
                 .location("D2 Factory")
                 .build();
 
-        this.mockMvc.perform(post("/api/events")
+        mockMvc.perform(post("/api/events")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(eventDto))
+                .content(objectMapper.writeValueAsString(eventDto))
         )
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$[0].objectName").exists())
-//                .andExpect(jsonPath("$[0].field").exists())
                 .andExpect(jsonPath("$[0].defaultMessage").exists())
                 .andExpect(jsonPath("$[0].code").exists())
-//                .andExpect(jsonPath("$[0].rejectedValue").exists())
         ;
 
+    }
+
+    @Test
+    void testFree() {
+        // 1
+        Event event = Event.builder()
+                .basePrice(0)
+                .maxPrice(0)
+                .build();
+
+        event.update();
+
+        assertThat(event.isFree()).isTrue();
+
+
+        // 2
+        event = Event.builder()
+                .basePrice(1000)
+                .maxPrice(0)
+                .build();
+
+        event.update();
+
+        assertThat(event.isFree()).isFalse();
+
+        // 3
+        event = Event.builder()
+                .basePrice(0)
+                .maxPrice(1000)
+                .build();
+
+        event.update();
+
+        assertThat(event.isFree()).isFalse();
+    }
+
+    @Test
+    void testOffline() {
+        // 1
+        Event event = Event.builder()
+                .location("역삼역")
+                .build();
+        event.update();
+
+        assertThat(event.isOffline()).isTrue();
+
+        // 2
+        event = Event.builder()
+                .build();
+        event.update();
+
+        assertThat(event.isOffline()).isFalse();
     }
 }
