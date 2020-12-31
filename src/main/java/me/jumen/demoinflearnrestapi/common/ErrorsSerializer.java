@@ -11,6 +11,7 @@ import java.io.IOException;
 public class ErrorsSerializer extends JsonSerializer<Errors> {
     @Override
     public void serialize(Errors errors, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+        gen.writeFieldName("errors");   // 좋은 질문 감사합니다. 스프링 부트 2.3으로 올라가면서 Jackson 라이브러리가 더이상 Array부터 만드는걸 허용하지 않습니다.
         gen.writeStartArray();
 
         errors.getFieldErrors().forEach(e -> {
