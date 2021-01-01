@@ -9,7 +9,7 @@ import java.util.Set;
 @Builder @NoArgsConstructor @AllArgsConstructor
 public class Account {
     @Id @GeneratedValue
-    private Integer id;
+    private Integer id; 
     private String email;
     private String password;
 
