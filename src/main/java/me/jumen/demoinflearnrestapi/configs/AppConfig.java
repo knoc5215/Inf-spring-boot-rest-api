@@ -1,4 +1,4 @@
-package me.jumen.demoinflearnrestapi.config;
+package me.jumen.demoinflearnrestapi.configs;
 
 import me.jumen.demoinflearnrestapi.accounts.Account;
 import me.jumen.demoinflearnrestapi.accounts.AccountRole;
