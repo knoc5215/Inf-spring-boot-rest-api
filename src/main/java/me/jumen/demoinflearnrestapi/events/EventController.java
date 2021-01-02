@@ -69,7 +69,8 @@ public class EventController {
         EventResource eventResource = new EventResource(event);
         eventResource.add(linkTo(EventController.class).withRel("query-events"));
         eventResource.add(selfLinkBuilder.withRel("update-event"));
-        eventResource.add(new Link("/docs/index.html#resources-events-create").withRel("profile"));
+        eventResource.add(Link.of("/docs/index.html#resources-events-create").withRel("profile"));
+
 
         return ResponseEntity.created(createdUri).body(eventResource);
     }
@@ -84,7 +85,7 @@ public class EventController {
 
         Page<Event> page = this.eventRepository.findAll(pageable);
         PagedModel<EntityModel<Event>> entityModels = assembler.toModel(page, EventResource::new);
-        entityModels.add(new Link("/docs/index.html#resources-events-list").withRel("profile"));
+        entityModels.add(Link.of("/docs/index.html#resources-events-list").withRel("profile"));
         if (account != null) {
             entityModels.add(linkTo(EventController.class).withRel("create-event"));
         }
@@ -104,7 +105,7 @@ public class EventController {
         Event event = byId.get();
         /* HATEOAS links add */
         EventResource eventResource = new EventResource(event);
-        eventResource.add(new Link("/docs/index.html#resources-events-get").withRel("profile"));
+        eventResource.add(Link.of("/docs/index.html#resources-events-get").withRel("profile"));
         if (event.getManager().equals(currentUser)) {
             eventResource.add(linkTo(EventController.class).slash(event.getId()).withRel("update-event"));
         }
@@ -140,7 +141,7 @@ public class EventController {
 
         /* HATEOAS links add */
         EventResource eventResource = new EventResource(savedEvent);
-        eventResource.add(new Link("/docs/index.html#resources-events-update").withRel("profile"));
+        eventResource.add(Link.of("/docs/index.html#resources-events-update").withRel("profile"));
         return ResponseEntity.ok(eventResource);
     }
 
