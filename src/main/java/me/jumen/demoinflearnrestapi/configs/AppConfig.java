@@ -35,13 +35,13 @@ public class AppConfig {
 
             @Override
             public void run(ApplicationArguments args) throws Exception {
-                Account account = Account.builder()
-                        .email("knoc5215@naver.com")
-                        .password("5215")
-                        .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
-                        .build();
-
-                accountService.saveAccount(account);
+//                Account account = Account.builder()
+//                        .email("knoc5215@naver.com")
+//                        .password("5215")
+//                        .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
+//                        .build();
+//
+//                accountService.saveAccount(account);
 
             }
         };
