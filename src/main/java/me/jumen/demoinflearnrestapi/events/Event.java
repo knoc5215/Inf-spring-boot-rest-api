@@ -1,7 +1,9 @@
 package me.jumen.demoinflearnrestapi.events;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
 import me.jumen.demoinflearnrestapi.accounts.Account;
+import me.jumen.demoinflearnrestapi.accounts.AccountSerializer;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -32,6 +34,7 @@ public class Event {
     @Enumerated(EnumType.STRING)
     private EventStatus eventStatus = EventStatus.DRAFT;
     @ManyToOne
+    @JsonSerialize(using = AccountSerializer.class) // Event를 serialize 하는 경우, manager field에 대해서는 AccountSerializer를 using
     private Account manager;
 
     public void update() {

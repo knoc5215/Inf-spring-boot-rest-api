@@ -1,8 +1,6 @@
 package me.jumen.demoinflearnrestapi.events;
 
-import me.jumen.demoinflearnrestapi.accounts.Account;
 import me.jumen.demoinflearnrestapi.accounts.AccountRepository;
-import me.jumen.demoinflearnrestapi.accounts.AccountRole;
 import me.jumen.demoinflearnrestapi.accounts.AccountService;
 import me.jumen.demoinflearnrestapi.common.AppProperties;
 import me.jumen.demoinflearnrestapi.common.BaseControllerTest;
@@ -20,7 +18,6 @@ import org.springframework.security.oauth2.common.util.Jackson2JsonParser;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
