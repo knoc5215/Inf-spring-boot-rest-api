@@ -1,8 +1,10 @@
 package me.jumen.demoinflearnrestapi.configs;
 
 import me.jumen.demoinflearnrestapi.accounts.Account;
+import me.jumen.demoinflearnrestapi.accounts.AccountRepository;
 import me.jumen.demoinflearnrestapi.accounts.AccountRole;
 import me.jumen.demoinflearnrestapi.accounts.AccountService;
+import me.jumen.demoinflearnrestapi.common.AppProperties;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -33,15 +35,25 @@ public class AppConfig {
             @Autowired
             AccountService accountService;
 
+            @Autowired
+            AppProperties appProperties;
+
             @Override
             public void run(ApplicationArguments args) throws Exception {
-//                Account account = Account.builder()
-//                        .email("knoc5215@naver.com")
-//                        .password("5215")
-//                        .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
-//                        .build();
-//
-//                accountService.saveAccount(account);
+                /* save admin account */
+                Account admin = Account.builder()
+                        .email(appProperties.getAdminUsername())
+                        .password(appProperties.getAdminPassword())
+                        .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
+                        .build();
+                accountService.saveAccount(admin);
+                /* save user account */
+                Account user = Account.builder()
+                        .email(appProperties.getUserUsername())
+                        .password(appProperties.getUserPassword())
+                        .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
+                        .build();
+                accountService.saveAccount(user);
 
             }
         };

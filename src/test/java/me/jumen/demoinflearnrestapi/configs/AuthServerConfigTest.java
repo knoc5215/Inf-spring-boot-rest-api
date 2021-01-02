@@ -3,6 +3,7 @@ package me.jumen.demoinflearnrestapi.configs;
 import me.jumen.demoinflearnrestapi.accounts.Account;
 import me.jumen.demoinflearnrestapi.accounts.AccountRole;
 import me.jumen.demoinflearnrestapi.accounts.AccountService;
+import me.jumen.demoinflearnrestapi.common.AppProperties;
 import me.jumen.demoinflearnrestapi.common.BaseControllerTest;
 import me.jumen.demoinflearnrestapi.common.TestDescription;
 import org.junit.jupiter.api.Test;
@@ -25,33 +26,20 @@ class AuthServerConfigTest extends BaseControllerTest {
     @Autowired
     AccountService accountService;
 
+    @Autowired
+    AppProperties appProperties;
+
     @Test
     @TestDescription("인증 토큰을 발급 받는 테스트")
-    void getAuthToken() throws Exception {
-        // Given
-        String username = "jumen@naver.com";
-        String password = "5215";
-
-        Account build = Account.builder()
-                .email(username)
-                .password(password)
-                .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
-                .build();
-        this.accountService.saveAccount(build);
-
-        String clientId = "myApp";
-        String clientSecret = "pass";
-
-
+    public void getAuthToken() throws Exception {
         this.mockMvc.perform(post("/oauth/token")
-                        .with(httpBasic(clientId, clientSecret))
-                        .param("username", username)
-                        .param("password", password)
-                        .param("grant_type", "password")
-                )
+                .with(httpBasic(appProperties.getClientId(), appProperties.getClientSecret()))
+                .param("username", appProperties.getUserUsername())
+                .param("password", appProperties.getUserPassword())
+                .param("grant_type", "password"))
 
-                .andExpect(status().isOk())
                 .andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("access_token").exists())
         ;
     }

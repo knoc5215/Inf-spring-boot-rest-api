@@ -4,6 +4,7 @@ import me.jumen.demoinflearnrestapi.accounts.Account;
 import me.jumen.demoinflearnrestapi.accounts.AccountRepository;
 import me.jumen.demoinflearnrestapi.accounts.AccountRole;
 import me.jumen.demoinflearnrestapi.accounts.AccountService;
+import me.jumen.demoinflearnrestapi.common.AppProperties;
 import me.jumen.demoinflearnrestapi.common.BaseControllerTest;
 import me.jumen.demoinflearnrestapi.common.TestDescription;
 import org.hamcrest.Matchers;
@@ -43,6 +44,9 @@ public class EventControllerTest extends BaseControllerTest {
 
     @Autowired
     AccountRepository accountRepository;
+
+    @Autowired
+    AppProperties appProperties;
 
     @Before
     public void setUp() {
@@ -146,30 +150,20 @@ public class EventControllerTest extends BaseControllerTest {
 
     private String getAccessToken() throws Exception {
         // Given
-        String username = "jumen@naver.com";
-        String password = "5215";
-
-        Account build = Account.builder()
-                .email(username)
-                .password(password)
-                .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
-                .build();
-        this.accountService.saveAccount(build);
-
-        String clientId = "myApp";
-        String clientSecret = "pass";
-
+//        Account userAccount = Account.builder()
+//                .email(appProperties.getUserUsername())
+//                .password(appProperties.getUserPassword())
+//                .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
+//                .build();
+//        this.accountService.saveAccount(userAccount);
 
         ResultActions perform = this.mockMvc.perform(post("/oauth/token")
-                .with(httpBasic(clientId, clientSecret))
-                .param("username", username)
-                .param("password", password)
+                .with(httpBasic(appProperties.getClientId(), appProperties.getClientSecret()))
+                .param("username", appProperties.getUserUsername())
+                .param("password", appProperties.getUserPassword())
                 .param("grant_type", "password")
         );
-
-        String responseBody = perform.andReturn().getResponse().getContentAsString();
-        Jackson2JsonParser parser = new Jackson2JsonParser();
-        return (String) parser.parseMap(responseBody).get("access_token");
+        return (String) new Jackson2JsonParser().parseMap(perform.andReturn().getResponse().getContentAsString()).get("access_token");
 
     }
 
