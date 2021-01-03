@@ -15,14 +15,13 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
 class AccountServiceTest {
 
     @Rule
-    public ExpectedException expectedException = ExpectedException.none();
+    public ExpectedException expectedException;
 
     @Autowired
     AccountService accountService;

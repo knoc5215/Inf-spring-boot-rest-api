@@ -1,6 +1,5 @@
 package me.jumen.demoinflearnrestapi.common;
 
-import me.jumen.demoinflearnrestapi.events.EventController;
 import me.jumen.demoinflearnrestapi.index.IndexController;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;

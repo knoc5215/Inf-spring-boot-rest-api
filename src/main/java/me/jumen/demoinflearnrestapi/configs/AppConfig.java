@@ -1,7 +1,6 @@
 package me.jumen.demoinflearnrestapi.configs;
 
 import me.jumen.demoinflearnrestapi.accounts.Account;
-import me.jumen.demoinflearnrestapi.accounts.AccountRepository;
 import me.jumen.demoinflearnrestapi.accounts.AccountRole;
 import me.jumen.demoinflearnrestapi.accounts.AccountService;
 import me.jumen.demoinflearnrestapi.common.AppProperties;
@@ -39,7 +38,7 @@ public class AppConfig {
             AppProperties appProperties;
 
             @Override
-            public void run(ApplicationArguments args) throws Exception {
+            public void run(ApplicationArguments args) {
                 /* save admin account */
                 Account admin = Account.builder()
                         .email(appProperties.getAdminUsername())

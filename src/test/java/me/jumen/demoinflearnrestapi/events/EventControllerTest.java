@@ -5,10 +5,8 @@ import me.jumen.demoinflearnrestapi.accounts.AccountRepository;
 import me.jumen.demoinflearnrestapi.accounts.AccountRole;
 import me.jumen.demoinflearnrestapi.accounts.AccountService;
 import me.jumen.demoinflearnrestapi.common.AppProperties;
-import me.jumen.demoinflearnrestapi.common.BaseControllerTest;
-import me.jumen.demoinflearnrestapi.common.TestDescription;
+import me.jumen.demoinflearnrestapi.common.BaseTest;
 import org.hamcrest.Matchers;
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -37,7 +35,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-public class EventControllerTest extends BaseControllerTest {
+public class EventControllerTest extends BaseTest {
 
     @Autowired
     EventRepository eventRepository;
